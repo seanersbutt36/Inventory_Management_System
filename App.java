@@ -11,9 +11,6 @@ Skills: Java, OOP, SQL JDBC, database design
 
 import java.util.Scanner;
 import java.util.ArrayList;
-/*import java.util.Date;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;*/
 
 public class App {
     public static void main(String[] args) {
@@ -60,12 +57,8 @@ public class App {
             }
         }
 
-        // If create, create a new product
-        // If update, choose which info to update
-        // If delete, choose a product to delete
-
         // If quit, stop the program
-
+        input.close();
         return;
     }
 
@@ -77,51 +70,4 @@ public class App {
             System.out.println();
         }
     }
-
-    /*static void inputReceiptInfo(Scanner _input) {
-        String type = "";
-        int quantity = 0;
-        boolean check = false;
-
-        System.out.println("Enter the type of receipt.");
-        System.out.print("1. Purchase  2. Sale: ");
-        while (!check) {
-            if (!_input.hasNextInt()) {
-                System.out.println("Please follow the format.");
-                _input.next();
-                continue;
-            }
-
-            int choice = _input.nextInt();
-            switch (choice) {
-                case 1:
-                    // A customer made a purchase
-                    type = "Purchase";
-                    check = true;
-                    break;
-                case 2:
-                    // You made a purchase with a supplier
-                    type = "Sale";
-                    check = true;
-                    break;
-                default:
-                    // Input doesn't exist
-                    System.out.println("Input doesn't exist. Please enter one of the avaliable options: ");
-                    break;
-            }
-        }
-
-        // Reset the 'check' boolean for the next input
-        check = false;
-
-        System.out.print("Enter a date (MM-dd-yyyy): ");
-        String inputDate = _input.nextLine();
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-        try {
-            Date data = dateFormat.parse(inputDate);
-        } catch (ParseException e) {
-            System.out.println("Invalid date format. Please use MM-dd-yyyy.");
-        }
-    }*/
 }
