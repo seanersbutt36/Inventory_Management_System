@@ -4,8 +4,7 @@ import java.util.ArrayList;
 public class Product {
     private String name = "";
     private int quantity = 0;
-    private ArrayList<Receipt> purchases = new ArrayList<>();
-    private ArrayList<Receipt> sales = new ArrayList<>();
+    private ArrayList<Receipt> receipts = new ArrayList<>();
     private int quantityLowCount = -1;
 
     public Product(Scanner _input) {
@@ -19,9 +18,10 @@ public class Product {
         // Product's purchases/sales
         boolean check = false;
         while (!check) {
-            System.out.print("1. Add a purchase receipt  2. Add a sale receipt  3. Finish: ");
+            System.out.print("1. Add a purchase receipt  2. Add a sale receipt  3. Finish");
+            System.out.print("Enter an option: ");
             if (!_input.hasNextInt()) {
-                System.out.println("Please follow the format.");
+                System.out.println("Please enter a number.");
                 _input.next();
                 continue;
             }
@@ -34,13 +34,13 @@ public class Product {
                     // Add purchase receipt
                     Receipt purchaseReceipt = new Receipt(_input, "Purchase");
                     quantity = purchaseReceipt.updateQuantity();
-                    purchases.add(purchaseReceipt);
+                    receipts.add(purchaseReceipt);
                     continue;
                 case 2:
                     // Add sale receipt
                     Receipt saleReceipt = new Receipt(_input, "Sale");
                     quantity = saleReceipt.updateQuantity();
-                    purchases.add(saleReceipt);
+                    receipts.add(saleReceipt);
                     continue;
                 case 3:
                     // Finish inputting the data
@@ -65,8 +65,63 @@ public class Product {
         quantityLowCount = _input.nextInt();
     }
 
-    public String getName() {
-        return name;
+    public void menu(Scanner _input) {
+        while (true) {
+            for (int i = 0; i < receipts.size(); i++) {
+                System.out.print((i + 1) + ". ");
+                receipts.get(i).display();
+            }
+
+            System.out.println("1. Modify name  2. Edit a sales receipt  3. Delete a receipt  4. Cancel");
+            System.out.print("Enter an option: ");
+
+            int choice = _input.nextInt();
+            _input.nextLine();
+
+            switch (choice) {
+                case 1:
+                    // Change the name of the product
+                    setName(_input.nextLine());
+                    continue;
+                case 2:
+                    // Edit a receipt
+                    int editReceipt = _input.nextInt();
+
+                    if (!_input.hasNextInt()) {
+                        System.out.println("Please enter an number.");
+                        _input.next();
+                    } else if (editReceipt > 0 && editReceipt < receipts.size()) {
+                        System.out.println("Please enter the number of the receipt that is listed.");
+                    } else {
+                        receipts.get(editReceipt - 1).menu(_input);
+                        System.out.println();
+                    }
+
+                    continue;
+                case 3:
+                    // Delete a receipt
+                    int deleteReceipt = _input.nextInt();
+
+                    if (!_input.hasNextInt()) {
+                        System.out.println("Please enter an number.");
+                        _input.next();
+                    } else if (deleteReceipt > 0 && deleteReceipt < receipts.size()) {
+                        System.out.println("Please enter the number of the receipt that is listed.");
+                    } else {
+                        receipts.remove(deleteReceipt - 1);
+                        System.out.println();
+                    }
+
+                    continue;
+                case 4:
+                    // Exit the game
+                    break;
+            }
+        }
+    }
+
+    public void setName(String _value) {
+        name = _value;
     }
 
     public int getQuantity() {
@@ -82,15 +137,7 @@ public class Product {
         }
         quantity = _input.nextInt();
     }
-
-    public Receipt getPurchase(int _index) {
-        return purchases.get(_index);
-    }
-
-    public Receipt getSale(int _index) {
-        return sales.get(_index);
-    }
-
+    
     public void display() {
         String quantityStr = (quantity > quantityLowCount) ? String.valueOf(quantity) : String.valueOf(quantity) + "*";
         System.out.println(" " + name + " | " + quantityStr + " |");

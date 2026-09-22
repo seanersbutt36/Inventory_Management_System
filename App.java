@@ -40,13 +40,36 @@ public class App {
                     // Create a product
                     Product product = new Product(input);
                     products.add(product);
-                    break;
+                    continue;
                 case 2:
                     // Update a product info
-                    break;
+                    System.out.println();
+                    System.out.print("Choose a product to view: ");
+                    if (!input.hasNextInt()) {
+                        System.out.println("Please enter an number.");
+                        input.next();
+                    } else if (choice > 0 && choice < products.size()) {
+                        System.out.println("Please enter the number of the product that is listed.");
+                    } else {
+                        products.get(choice).menu(input);
+                    }
+
+                    continue;
                 case 3:
                     // Delete a product
-                    break;
+                    int deleteProduct = input.nextInt();
+
+                    if (!input.hasNextInt()) {
+                        System.out.println("Please enter an number.");
+                        input.next();
+                    } else if (deleteProduct > 0 && deleteProduct < products.size()) {
+                        System.out.println("Please enter the number of the receipt that is listed.");
+                    } else {
+                        products.remove(deleteProduct - 1);
+                        System.out.println();
+                    }
+                    
+                    continue;
                 case 4:
                     // Quitting
                     quit = true;
@@ -65,7 +88,8 @@ public class App {
     static void display(ArrayList<Product> _products) {
         if (!_products.isEmpty()) {
             for (int i = 0; i < _products.size(); i++) {
-                _products.get(i).display();
+                System.out.print((i + 1) + ". ");
+                _products.get(i - 1).display();
             }
             System.out.println();
         }
