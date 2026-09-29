@@ -10,9 +10,12 @@ public class Receipt {
     private char symbol = '+';
 
     public Receipt(Scanner _input, String _type) {
-        String type = _type;
         boolean check = false;
 
+        // Assign the type of receipt
+        type = _type;
+
+        // Input the date
         while (!check) {
             System.out.println();
             System.out.print("Enter a date (MM-dd-yyyy): ");
@@ -31,20 +34,23 @@ public class Receipt {
         // Reset the "check" boolean for the next input.
         check = false;
 
+        // Input the quantity
         while (!check) {
             System.out.println();
             System.out.print("Enter the quantity: ");
+
             if (!_input.hasNextInt()) {
                 System.out.println("Please enter an number.");
                 _input.next(); 
             }
                 
-            int qunatityInput = _input.nextInt();
+            int quantityInput = _input.nextInt();
             _input.nextLine();
 
-            if (qunatityInput < 0) {
+            if (quantityInput < 0) {
                 System.out.println("Enter a positive number.");
             } else {
+                quantity = quantityInput;
                 check = true;
             }
         }
@@ -57,12 +63,18 @@ public class Receipt {
         }
     }
 
-    public int updateQuantity() {
-        return (symbol == '+') ? quantity : -quantity;
+    public String getType() {
+        return type;
+    }
+
+    public int getQuantity() {
+        return (type == "Purchase") ? quantity : quantity * -1;
     }
 
     public void menu(Scanner _input) {
-        while (true) {
+        boolean exit = false;
+
+        while (!exit) {
             display();
             System.out.println("1. Change the type  2. Edit the date  3. Edit the quantity  4. Cancel");
             System.out.print("Enter an option: ");
@@ -80,20 +92,22 @@ public class Receipt {
                     System.out.println("This receipt is currently a " + currentType + " receipt.");
                     System.out.println("Would you like to change this receipt to " + newType + " receipt?");
                     System.out.print("1. Yes  2. No: ");
+
+                    if (!_input.hasNextInt()) {
+                        System.out.println("Please enter a number.");
+                        _input.next();
+                    }
                     
                     int changeTypeInput = _input.nextInt();
 
-                    if (!_input.hasNextInt()) {
-                        System.out.println("Please enter an number.");
-                        _input.next();
-                    } else if (changeTypeInput > 0 && changeTypeInput < 2) {
-                        System.out.println("Please enter the number of the receipt that is listed.");
-                    } else {
+                    if (changeTypeInput > 0 && changeTypeInput < 2) {
                         if (changeTypeInput == 1) {
                             type = newType;
                             System.out.println("The receipt type has changed.");
                         }
                         System.out.println();
+                    } else {
+                        System.out.println("Please enter the number of the receipt that is listed.");
                     }
                     continue;
                 case 2:
@@ -114,7 +128,7 @@ public class Receipt {
                     System.out.println();
                     System.out.print("Enter the quantity: ");
                     if (!_input.hasNextInt()) {
-                        System.out.println("Please enter an number.");
+                        System.out.println("Please enter a number.");
                         _input.next(); 
                     }
                 
@@ -128,7 +142,11 @@ public class Receipt {
                     }
                     continue;
                 case 4:
-                    // Exit the game
+                    // Exit the receipt menu
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Please choose a number from the options.");
                     break;
             }
         }

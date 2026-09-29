@@ -20,8 +20,10 @@ public class App {
 
         // Select to create, update, delete, or quit
         while (!quit) {
-            // Output the data
-            display(products);
+            if (!products.isEmpty()) {
+                // Output the data
+                display(products);
+            }
 
             System.out.println("1. Add   2. Update   3. Remove   4. Quit");
             System.out.print("Choose an option: ");
@@ -45,28 +47,38 @@ public class App {
                     // Update a product info
                     System.out.println();
                     System.out.print("Choose a product to view: ");
+
                     if (!input.hasNextInt()) {
                         System.out.println("Please enter an number.");
                         input.next();
-                    } else if (choice > 0 && choice < products.size()) {
-                        System.out.println("Please enter the number of the product that is listed.");
+                    }
+                    
+                    int editProduct = input.nextInt();
+                    
+                    if (editProduct > 0 && editProduct < products.size()) {
+                        products.get(editProduct - 1).menu(input);
                     } else {
-                        products.get(choice).menu(input);
+                        System.out.println("Please enter the number of the product that is listed.");
                     }
 
                     continue;
                 case 3:
                     // Delete a product
-                    int deleteProduct = input.nextInt();
+                    System.out.println();
+                    System.out.print("Choose a product to view: ");
 
                     if (!input.hasNextInt()) {
                         System.out.println("Please enter an number.");
                         input.next();
-                    } else if (deleteProduct > 0 && deleteProduct < products.size()) {
-                        System.out.println("Please enter the number of the receipt that is listed.");
-                    } else {
+                    } 
+                    
+                    int deleteProduct = input.nextInt();
+
+                    if (deleteProduct > 0 && deleteProduct < products.size()) {
                         products.remove(deleteProduct - 1);
                         System.out.println();
+                    } else {
+                        System.out.println("Please enter the number of the receipt that is listed.");
                     }
                     
                     continue;
@@ -86,12 +98,10 @@ public class App {
     }
 
     static void display(ArrayList<Product> _products) {
-        if (!_products.isEmpty()) {
-            for (int i = 0; i < _products.size(); i++) {
-                System.out.print((i + 1) + ". ");
-                _products.get(i - 1).display();
-            }
-            System.out.println();
+        for (int i = 0; i < _products.size(); i++) {
+            System.out.print((i + 1) + ". ");
+            _products.get(i).display();
         }
+        System.out.println();
     }
 }

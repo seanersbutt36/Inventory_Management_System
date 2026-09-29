@@ -10,7 +10,7 @@ public class Product {
     public Product(Scanner _input) {
         // Product's name
         System.out.println();
-        System.out.print("Enter the product name: ");
+        System.out.print("Enter the product's name: ");
         name = _input.nextLine();
         
         System.out.println();
@@ -18,7 +18,7 @@ public class Product {
         // Product's purchases/sales
         boolean check = false;
         while (!check) {
-            System.out.print("1. Add a purchase receipt  2. Add a sale receipt  3. Finish");
+            System.out.println("1. Add a purchase receipt  2. Add a sale receipt  3. Finish");
             System.out.print("Enter an option: ");
             if (!_input.hasNextInt()) {
                 System.out.println("Please enter a number.");
@@ -33,13 +33,13 @@ public class Product {
                 case 1:
                     // Add purchase receipt
                     Receipt purchaseReceipt = new Receipt(_input, "Purchase");
-                    quantity = purchaseReceipt.updateQuantity();
+                    quantity += purchaseReceipt.getQuantity();
                     receipts.add(purchaseReceipt);
                     continue;
                 case 2:
                     // Add sale receipt
                     Receipt saleReceipt = new Receipt(_input, "Sale");
-                    quantity = saleReceipt.updateQuantity();
+                    quantity += saleReceipt.getQuantity();
                     receipts.add(saleReceipt);
                     continue;
                 case 3:
@@ -51,13 +51,11 @@ public class Product {
                     System.out.println("Invalid input. Please choose one of the avaliable options.");
                     continue;
             }
-            System.out.println("End of loop");
         }
-        System.out.println("Looping end");
 
         // Product's Low Stock Setup
         System.out.println();
-        System.out.print("Enter an amount to trigger an alert for low stock: ");
+        System.out.println("Enter an amount to trigger an alert for low stock: ");
         if (!_input.hasNextInt()) {
             System.out.println("Please enter a number.");
             _input.next();
@@ -66,7 +64,9 @@ public class Product {
     }
 
     public void menu(Scanner _input) {
-        while (true) {
+        boolean exit = false;
+
+        while (!exit) {
             for (int i = 0; i < receipts.size(); i++) {
                 System.out.print((i + 1) + ". ");
                 receipts.get(i).display();
@@ -81,40 +81,64 @@ public class Product {
             switch (choice) {
                 case 1:
                     // Change the name of the product
+                    System.out.print("Enter the product's new name: ");
                     setName(_input.nextLine());
+                    System.out.println();
                     continue;
                 case 2:
                     // Edit a receipt
-                    int editReceipt = _input.nextInt();
-
+                    System.out.print("Pick a receipt to edit: ");
                     if (!_input.hasNextInt()) {
-                        System.out.println("Please enter an number.");
+                        System.out.println("Please enter a number.");
                         _input.next();
-                    } else if (editReceipt > 0 && editReceipt < receipts.size()) {
+                    }
+                    
+                    int editReceipt = _input.nextInt();
+                    _input.nextLine();
+
+                    if (editReceipt > 0 && editReceipt < receipts.size()) {
                         System.out.println("Please enter the number of the receipt that is listed.");
                     } else {
+                        Receipt oldReceipt = receipts.get(editReceipt - 1);
                         receipts.get(editReceipt - 1).menu(_input);
+                        Receipt newReceipt = receipts.get(editReceipt - 1);
+
+                        if (newReceipt.getType() == "Purchase") {
+                            quantity += (newReceipt.getQuantity() - oldReceipt.getQuantity());
+                        }
+                        else if (newReceipt.getType() == "Sale") {
+                            quantity += (-newReceipt.getQuantity() + oldReceipt.getQuantity());
+                        }
+
                         System.out.println();
                     }
 
                     continue;
                 case 3:
                     // Delete a receipt
-                    int deleteReceipt = _input.nextInt();
-
+                    System.out.print("Pick a receipt to delete: ");
                     if (!_input.hasNextInt()) {
-                        System.out.println("Please enter an number.");
+                        System.out.println("Please enter a number.");
                         _input.next();
-                    } else if (deleteReceipt > 0 && deleteReceipt < receipts.size()) {
-                        System.out.println("Please enter the number of the receipt that is listed.");
-                    } else {
+                    }
+                    
+                    int deleteReceipt = _input.nextInt();
+                    _input.nextLine();
+
+                    if (deleteReceipt > 0 && deleteReceipt < receipts.size()) {
                         receipts.remove(deleteReceipt - 1);
                         System.out.println();
+                    } else {
+                        System.out.println("Please enter the number of the receipt that is listed.");
                     }
 
                     continue;
                 case 4:
-                    // Exit the game
+                    // Exit the product menu
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Please choose a number from the options.");
                     break;
             }
         }
@@ -122,20 +146,6 @@ public class Product {
 
     public void setName(String _value) {
         name = _value;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Scanner _input) {
-        System.out.print("Enter the quantity: ");
-        if (!_input.hasNextInt()) {
-            System.out.println("Please enter a number.");
-            _input.next();
-
-        }
-        quantity = _input.nextInt();
     }
     
     public void display() {
