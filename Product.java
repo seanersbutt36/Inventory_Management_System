@@ -88,17 +88,16 @@ public class Product {
                 case 2:
                     // Edit a receipt
                     System.out.print("Pick a receipt to edit: ");
-                    if (!_input.hasNextInt()) {
-                        System.out.println("Please enter a number.");
-                        _input.next();
-                    }
-                    
-                    int editReceipt = _input.nextInt();
-                    _input.nextLine();
 
-                    if (editReceipt > 0 && editReceipt < receipts.size()) {
-                        System.out.println("Please enter the number of the receipt that is listed.");
-                    } else {
+                    try {
+                        if (!_input.hasNextInt()) {
+                            System.out.println("Please enter a number.");
+                            _input.next();
+                        }
+                    
+                        int editReceipt = _input.nextInt();
+                        _input.nextLine();
+
                         Receipt oldReceipt = receipts.get(editReceipt - 1);
                         receipts.get(editReceipt - 1).menu(_input);
                         Receipt newReceipt = receipts.get(editReceipt - 1);
@@ -111,25 +110,38 @@ public class Product {
                         }
 
                         System.out.println();
+
+                    } catch (IndexOutOfBoundsException e) {
+                        // Invalid index access
+                        System.out.println("Please enter the number of the receipt that is listed.");
+                    } catch (IllegalArgumentException e) {
+                        // Invalid input type
+                        System.out.println("Error: " + e.getMessage());
                     }
 
                     continue;
                 case 3:
                     // Delete a receipt
                     System.out.print("Pick a receipt to delete: ");
-                    if (!_input.hasNextInt()) {
-                        System.out.println("Please enter a number.");
-                        _input.next();
-                    }
-                    
-                    int deleteReceipt = _input.nextInt();
-                    _input.nextLine();
 
-                    if (deleteReceipt > 0 && deleteReceipt < receipts.size()) {
+                    try {
+                        if (!_input.hasNextInt()) {
+                            System.out.println("Please enter a number.");
+                            _input.next();
+                        }
+                    
+                        int deleteReceipt = _input.nextInt();
+                        _input.nextLine();
+
                         receipts.remove(deleteReceipt - 1);
                         System.out.println();
-                    } else {
+                        
+                    } catch (IndexOutOfBoundsException e) {
+                        // Invalid index access
                         System.out.println("Please enter the number of the receipt that is listed.");
+                    } catch (IllegalArgumentException e) {
+                        // Invalid input type
+                        System.out.println("Error: " + e.getMessage());
                     }
 
                     continue;

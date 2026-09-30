@@ -48,17 +48,23 @@ public class App {
                     System.out.println();
                     System.out.print("Choose a product to view: ");
 
-                    if (!input.hasNextInt()) {
-                        System.out.println("Please enter an number.");
-                        input.next();
-                    }
+                    try {
+                        if (!input.hasNextInt()) {
+                            System.out.println("Please enter a number.");
+                            input.next();
+                        }
                     
-                    int editProduct = input.nextInt();
+                        int editProduct = input.nextInt();
                     
-                    if (editProduct > 0 && editProduct < products.size()) {
                         products.get(editProduct - 1).menu(input);
-                    } else {
+                        System.out.println();
+
+                    } catch (IndexOutOfBoundsException e) {
+                        // Invalid index access
                         System.out.println("Please enter the number of the product that is listed.");
+                    } catch (IllegalArgumentException e) {
+                        // Invalid input type
+                        System.out.println("Error: " + e.getMessage());
                     }
 
                     continue;
@@ -67,18 +73,23 @@ public class App {
                     System.out.println();
                     System.out.print("Choose a product to view: ");
 
-                    if (!input.hasNextInt()) {
-                        System.out.println("Please enter an number.");
-                        input.next();
-                    } 
+                    try {
+                        if (!input.hasNextInt()) {
+                            System.out.println("Please enter a number.");
+                            input.next();
+                        } 
                     
-                    int deleteProduct = input.nextInt();
+                        int deleteProduct = input.nextInt();
 
-                    if (deleteProduct > 0 && deleteProduct < products.size()) {
                         products.remove(deleteProduct - 1);
                         System.out.println();
-                    } else {
-                        System.out.println("Please enter the number of the receipt that is listed.");
+
+                    } catch (IndexOutOfBoundsException e) {
+                        // Invalid index access
+                        System.out.println("Please enter the number of the product that is listed.");
+                    } catch (IllegalArgumentException e) {
+                        // Invalid input type
+                        System.out.println("Error: " + e.getMessage());
                     }
                     
                     continue;
