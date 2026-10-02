@@ -98,16 +98,15 @@ public class Product {
                         int editReceipt = _input.nextInt();
                         _input.nextLine();
 
-                        Receipt oldReceipt = receipts.get(editReceipt - 1);
+                        int oldQuantity = receipts.get(editReceipt - 1).getQuantity();
                         receipts.get(editReceipt - 1).menu(_input);
-                        Receipt newReceipt = receipts.get(editReceipt - 1);
+                        int newQuantity = receipts.get(editReceipt - 1).getQuantity();
 
-                        if (newReceipt.getType() == "Purchase") {
-                            quantity += (newReceipt.getQuantity() - oldReceipt.getQuantity());
-                        }
-                        else if (newReceipt.getType() == "Sale") {
-                            quantity += (-newReceipt.getQuantity() + oldReceipt.getQuantity());
-                        }
+                        System.out.println(oldQuantity + " | " + newQuantity);
+
+                        quantity += (-oldQuantity + newQuantity);
+
+                        System.out.println("Quantity test: " + quantity);
 
                         System.out.println();
 
@@ -133,7 +132,10 @@ public class Product {
                         int deleteReceipt = _input.nextInt();
                         _input.nextLine();
 
+                        int deletedQuantity = receipts.get(deleteReceipt - 1).getQuantity();
+
                         receipts.remove(deleteReceipt - 1);
+                        quantity -= deletedQuantity;
                         System.out.println();
                         
                     } catch (IndexOutOfBoundsException e) {

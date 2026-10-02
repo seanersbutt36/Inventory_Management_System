@@ -68,7 +68,9 @@ public class Receipt {
     }
 
     public int getQuantity() {
-        return (type == "Purchase") ? quantity : quantity * -1;
+        if (type == "Purchase") 
+            return quantity;
+        return -quantity;
     }
 
     public void menu(Scanner _input) {
@@ -132,13 +134,13 @@ public class Receipt {
                         _input.next(); 
                     }
                 
-                    int qunatityInput = _input.nextInt();
+                    int quantityInput = _input.nextInt();
                     _input.nextLine();
 
-                    if (qunatityInput < 0) {
+                    if (quantityInput < 0) {
                         System.out.println("Enter a positive number.");
                     } else {
-                        quantity = qunatityInput;
+                        quantity = quantityInput;
                     }
                     continue;
                 case 4:
@@ -153,6 +155,13 @@ public class Receipt {
     }
 
     public void display() {
+        if (type == "Purchase") {
+            symbol = '+';
+        }
+        else if (type == "Sale") {
+            symbol = '-';
+        }
+
         System.out.println(type);
         System.out.println("Date: " + date);
         System.out.println(" Quantity: " + symbol + quantity);
